@@ -5,21 +5,24 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
   entry: './src/app.js',
   output: {
-    path: 'dist',
+    path: path.resolve(__dirname, "dist"),
     filename: 'bundle.js'
   },
   module: {
     rules: [{
       test: /\.scss$/,
-      use: ExtractTextPlugin.extract({ fallback: "style-loader", use: ['css-loader', 'sass-loader']})
+      use: ExtractTextPlugin.extract({
+        fallback: "style-loader",
+        use: ['css-loader', 'sass-loader']
+      })
     }]
   },
   plugins: [
     new HtmlWebpackPlugin({
       title: 'My AppProject',
-      minify: {
-        collapseWhitespace: true,
-      },
+      // minify: {
+      //   collapseWhitespace: true,
+      // },
       hash: true,
       template: './src/index.html'
     }),
