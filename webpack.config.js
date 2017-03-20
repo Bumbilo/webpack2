@@ -1,7 +1,14 @@
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var path = require('path');
-var webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const isProd = process.env.NODE_ENV === 'production'; // true
+const cssDev = ['style-loader', 'css-loader', 'sass-loader'];
+const cssProd = ExtractTextPlugin.extract({
+  fallback: "style-loader",
+  use: ['css-loader', 'sass-loader']
+});
+const cssConfig = isProd ? cssProd : cssDev;
 
 module.exports = {
   entry: {
@@ -10,15 +17,12 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: '[name].bundle.js'
+    filename: '[name].js'
   },
   module: {
     rules: [{
         test: /\.scss$/,
-        use: ExtractTextPlugin.extract({
-          fallback: "style-loader",
-          use: ['css-loader', 'sass-loader']
-        })
+        use: cssConfig
       },
       {
         test: /\.js$/,
@@ -51,7 +55,11 @@ module.exports = {
       filename: 'contact.html',
       template: './src/contact.html'
     }),
-    new ExtractTextPlugin("app.css"),
+    new ExtractTextPlugin({
+      filename: "app.css",
+      disable: !isProd,
+      allChunks: true
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin()
   ]
