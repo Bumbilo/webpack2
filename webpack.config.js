@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const isProd = process.env.NODE_ENV === 'production'; // true
 const cssDev = ['style-loader', 'css-loader', 'sass-loader'];
+
 const cssProd = ExtractTextPlugin.extract({
   fallback: "style-loader",
   use: ['css-loader', 'sass-loader']
@@ -28,6 +29,10 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: "babel-loader"
+      },
+      {
+        test: /\.jpg$/,
+        loader: "file-loader"
       }
     ]
   },
