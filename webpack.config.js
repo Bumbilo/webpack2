@@ -13,8 +13,7 @@ const cssConfig = isProd ? cssProd : cssDev;
 
 module.exports = {
   entry: {
-    app: './src/app.js',
-    contact: './src/contact.js'
+    app: './src/app.js'
   },
   output: {
     path: path.resolve(__dirname, "dist"),
@@ -22,7 +21,7 @@ module.exports = {
   },
   module: {
     rules: [{
-        test: /\.scss$/,
+        test: /\.sass$/,
         use: cssConfig
       },
       {
@@ -31,8 +30,11 @@ module.exports = {
         loader: "babel-loader"
       },
       {
-        test: /\.jpg$/,
-        loader: "file-loader"
+        test: /\.(jpg?g|png|gif|svg)$/i,
+        loader: [
+          "file-loader?name=[name].[ext]&outputPath=images/",
+          "image-webpack-loader"
+          ]
       }
     ]
   },
@@ -52,13 +54,6 @@ module.exports = {
       hash: true,
       excludeChunks: ['contact'],
       template: './src/index.html'
-    }),
-    new HtmlWebpackPlugin({
-      title: 'My Contact',
-      hash: true,
-      chunks: ['contact'],
-      filename: 'contact.html',
-      template: './src/contact.html'
     }),
     new ExtractTextPlugin({
       filename: "app.css",
